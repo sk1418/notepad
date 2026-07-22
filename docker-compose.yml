@@ -1,0 +1,17 @@
+services:
+  notepad:
+    build: .
+    image: notepad:latest
+    container_name: notepad
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    volumes:
+      - notepad-data:/data
+    environment:
+      DB_URL: jdbc:sqlite:/data/note.db
+      SESSION_SIGN_KEY: ${SESSION_SIGN_KEY:-changeme6819b57a326945c1968f45236589}
+      # ktor.deployment.environment: prod   # uncomment to enable secure cookies (needs HTTPS)
+
+volumes:
+  notepad-data:

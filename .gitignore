@@ -1,0 +1,65 @@
+.gradle
+build/
+!gradle/wrapper/gradle-wrapper.jar
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+bin/
+!**/src/main/**/bin/
+!**/src/test/**/bin/
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+out/
+!**/src/main/**/out/
+!**/src/test/**/out/
+
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+
+### VS Code ###
+.vscode/
+
+### Node / frontend ###
+node_modules/
+frontend/dist/
+frontend/.vite/
+*.tsbuildinfo
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+### FE assets copied at docker build time ###
+src/main/resources/static/*
+!src/main/resources/static/.gitkeep
+
+### DB / data ###
+*.db
+*.db-journal
+*.sqlite
+*.sqlite3
+
+### Env / secrets ###
+.env
+.env.local
+.env.*.local
+
+### Logs / OS ###
+*.log
+.DS_Store
+Thumbs.db

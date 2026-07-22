@@ -1,0 +1,13 @@
+ktor:
+  application:
+    modules:
+      - sk1418.akcloud.notepad.ApplicationKt.module
+  deployment:
+    port: 8080
+database:
+  url: ${DB_URL:jdbc:sqlite:./note.db}
+  driver: ${DB_DRIVER:org.sqlite.JDBC}
+  user: ${DB_USER:}
+  password: ${DB_PASSWORD:}
+session:
+  signKey: ${SESSION_SIGN_KEY:6819b57a326945c1968f45236589}

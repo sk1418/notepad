@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>notepad</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="stylesheet" href="/src/style.css" />
+  </head>
+  <body>
+    <div id="app">
+      <header class="top-bar">
+        <div class="brand" id="brand"><span class="brand-icon"></span>Notepad</div>
+        <div class="url">
+          <span class="host" id="host"></span>
+          <span class="slash">/</span>
+          <input id="key-input" class="key-input" spellcheck="false" autocapitalize="off" maxlength="32" pattern="[A-Za-z0-9._-]{1,32}" />
+          <button id="btn-edit-key" class="icon-btn key-edit-btn" data-tooltip="Edit URL slug" type="button"></button>
+        </div>
+        <div class="spacer"></div>
+        <nav class="toolbar">
+          <button id="btn-password" class="icon-btn" data-tooltip="Password protect"></button>
+          <button id="btn-share" class="icon-btn" data-tooltip="Share read only link"></button>
+          <span class="divider" aria-hidden="true"></span>
+          <details class="popover" id="pop-font">
+            <summary class="icon-btn" data-tooltip="Font family">Aa</summary>
+            <div class="menu" id="font-menu">
+              <div class="menu-group">Monospace</div>
+              <button data-font="mono" type="button">Menlo / Consolas</button>
+              <button data-font="sfmono" type="button">SF Mono</button>
+              <button data-font="jetbrains" type="button">JetBrains Mono</button>
+              <button data-font="firacode" type="button">Fira Code</button>
+              <button data-font="cascadia" type="button">Cascadia Code</button>
+              <button data-font="courier" type="button">Courier New</button>
+              <div class="menu-group">Sans</div>
+              <button data-font="system" type="button">System UI</button>
+              <button data-font="sans" type="button">Helvetica</button>
+              <button data-font="arial" type="button">Arial</button>
+              <button data-font="verdana" type="button">Verdana</button>
+              <button data-font="tahoma" type="button">Tahoma</button>
+              <button data-font="trebuchet" type="button">Trebuchet MS</button>
+              <div class="menu-group">Serif</div>
+              <button data-font="serif" type="button">Georgia</button>
+              <button data-font="times" type="button">Times New Roman</button>
+              <button data-font="garamond" type="button">Garamond</button>
+              <button data-font="palatino" type="button">Palatino</button>
+            </div>
+          </details>
+          <details class="popover" id="pop-size">
+            <summary class="icon-btn" data-tooltip="Font size"><span class="t-small">T</span><span class="t-big">T</span></summary>
+            <div class="menu" id="size-menu">
+              <button data-size="12" type="button">12</button>
+              <button data-size="13" type="button">13</button>
+              <button data-size="14" type="button">14</button>
+              <button data-size="15" type="button">15</button>
+              <button data-size="16" type="button">16</button>
+              <button data-size="18" type="button">18</button>
+              <button data-size="20" type="button">20</button>
+              <button data-size="24" type="button">24</button>
+              <button data-size="28" type="button">28</button>
+              <button data-size="32" type="button">32</button>
+              <button data-size="40" type="button">40</button>
+              <button data-size="48" type="button">48</button>
+            </div>
+          </details>
+          <button id="btn-wrap" class="icon-btn" data-tooltip="Wrap long lines"></button>
+          <button id="btn-linenr" class="icon-btn" data-tooltip="Toggle line numbers"></button>
+          <button id="btn-theme" class="icon-btn" data-tooltip="Toggle dark mode"></button>
+          <details class="popover" id="pop-view">
+            <summary class="icon-btn" data-tooltip="View as"></summary>
+            <div class="menu" id="view-menu">
+              <button data-view="raw" type="button">Raw text</button>
+              <button data-view="md" type="button">Markdown</button>
+            </div>
+          </details>
+        </nav>
+      </header>
+
+      <div class="editor-card">
+        <div class="editor-wrap">
+          <div id="gutter" class="gutter" aria-hidden="true"><div id="gutter-inner" class="gutter-inner"></div></div>
+          <textarea
+            id="editor"
+            class="editor"
+            spellcheck="false"
+            autocapitalize="off"
+            autocorrect="off"
+            wrap="off"
+            placeholder="Start typing…"
+          ></textarea>
+          <div id="measure" class="measure" aria-hidden="true"></div>
+        </div>
+
+        <footer class="bottom-bar">
+          <div class="left">
+            <span><span id="chars">0</span> chars</span>
+            <span class="sep">·</span>
+            <span><span id="words">0</span> words</span>
+            <span class="sep">·</span>
+            <span><span id="lines">0</span> lines</span>
+            <span class="sep">·</span>
+            <span class="muted">Updated <span id="updated">—</span></span>
+          </div>
+          <div class="right">
+            <span id="status" class="status"></span>
+          </div>
+        </footer>
+      </div>
+    </div>
+
+    <div id="modal-backdrop" class="backdrop hidden">
+      <div class="modal" role="dialog" aria-modal="true">
+        <h3 id="modal-title">Set password</h3>
+        <p class="hint" id="modal-hint">Protect this note with a password.</p>
+        <div class="input-wrap input-wrap-current hidden" id="modal-current-wrap">
+          <input id="modal-current" type="password" placeholder="current password" autocomplete="current-password" autocapitalize="off" autocorrect="off" spellcheck="false" />
+          <button type="button" id="modal-eye-current" class="eye-btn" data-tooltip="Show password" aria-label="Show password"></button>
+        </div>
+        <div class="input-wrap">
+          <input id="modal-input" type="password" placeholder="password" autocomplete="new-password" autocapitalize="off" autocorrect="off" spellcheck="false" />
+          <button type="button" id="modal-eye" class="eye-btn" data-tooltip="Show password" aria-label="Show password"></button>
+        </div>
+        <div class="modal-error hidden" id="modal-error"></div>
+        <div class="actions">
+          <button id="modal-cancel" class="ghost">Cancel</button>
+          <button id="modal-save" class="primary">Save</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="toast" class="toast hidden" role="status" aria-live="polite"></div>
+
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
