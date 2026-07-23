@@ -28,7 +28,9 @@ ARG APP_VERSION=dev
 LABEL org.opencontainers.image.version=$APP_VERSION
 ENV APP_VERSION=$APP_VERSION
 WORKDIR /app
-RUN useradd -r -u 1001 -g root notepad && mkdir -p /data && chown -R notepad /data
+RUN apt-get update && apt-get install -y --no-install-recommends curl \
+    && rm -rf /var/lib/apt/lists/* \
+    && useradd -r -u 1001 -g root notepad && mkdir -p /data && chown -R notepad /data
 COPY --from=be-build /src/build/libs/*-all.jar /app/app.jar
 
 ENV DB_URL=jdbc:sqlite:/data/note.db \
@@ -39,6 +41,6 @@ USER notepad
 VOLUME ["/data"]
 
 HEALTHCHECK --interval=30s --timeout=3s --start-period=15s --retries=3 \
-  CMD wget -q --spider http://127.0.0.1:8080/ || exit 1
+  CMD curl -fsS http://127.0.0.1:8080/ >/dev/null || exit 1
 
 ENTRYPOINT ["sh", "-c", "exec java $JAVA_OPTS -jar /app/app.jar"]
