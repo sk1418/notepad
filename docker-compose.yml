@@ -7,7 +7,7 @@ services:
     ports:
       - "8080:8080"
     volumes:
-      - notepad-data:/data
+      - notepad-data:/data/note.db
     environment:
       DB_URL: jdbc:sqlite:/data/note.db
       SESSION_SIGN_KEY: ${SESSION_SIGN_KEY:-changeme6819b57a326945c1968f45236589}
