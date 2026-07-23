@@ -36,7 +36,7 @@ ENV DB_URL=jdbc:sqlite:/data/note.db \
 
 EXPOSE 8080
 USER notepad
-VOLUME ["/data/note.db"]
+VOLUME ["/data"]
 
 HEALTHCHECK --interval=30s --timeout=3s --start-period=15s --retries=3 \
   CMD wget -q --spider http://127.0.0.1:8080/ || exit 1

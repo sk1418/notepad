@@ -7,7 +7,7 @@ services:
     ports:
       - "8080:8080"
     volumes:
-      - notepad-data:/data/note.db
+      - notepad-data:/data
     environment:
       DB_URL: jdbc:sqlite:/data/note.db
       # REQUIRED. Refuses to start if unset or equal to the leaked repo default.
