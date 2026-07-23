@@ -1,7 +1,9 @@
 # syntax=docker/dockerfile:1.7
 
 ########################  Stage 1: Build frontend  ########################
-FROM node:22-alpine AS fe-build
+# Pinned to the builder's native arch — JS bundling is arch-agnostic and this
+# avoids qemu-emulating amd64 npm on arm64 hosts (which hangs for minutes/hours).
+FROM --platform=$BUILDPLATFORM node:22-alpine AS fe-build
 WORKDIR /fe
 COPY frontend/package.json frontend/package-lock.json* ./
 RUN npm install --no-audit --no-fund
@@ -9,7 +11,8 @@ COPY frontend/ ./
 RUN npm run build
 
 ########################  Stage 2: Build backend  #########################
-FROM eclipse-temurin:21-jdk AS be-build
+# Same reason — JVM bytecode is arch-agnostic. Only the runtime stage varies.
+FROM --platform=$BUILDPLATFORM eclipse-temurin:21-jdk AS be-build
 WORKDIR /src
 COPY gradlew settings.gradle.kts build.gradle.kts gradle.properties* ./
 COPY gradle ./gradle
