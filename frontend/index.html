@@ -14,7 +14,7 @@
         <div class="url">
           <span class="host" id="host"></span>
           <span class="slash">/</span>
-          <input id="key-input" class="key-input" spellcheck="false" autocapitalize="off" maxlength="32" pattern="[A-Za-z0-9._-]{1,32}" />
+          <input id="key-input" class="key-input" spellcheck="false" autocapitalize="off" maxlength="64" pattern="[A-Za-z0-9._-]{1,64}" />
           <button id="btn-edit-key" class="icon-btn key-edit-btn" data-tooltip="Edit URL slug" type="button"></button>
         </div>
         <div class="spacer"></div>
@@ -106,6 +106,12 @@
           </div>
         </footer>
       </div>
+
+      <footer class="app-footer">
+        <span class="app-footer-name">Notepad</span>
+        <span class="app-footer-ver" id="app-version"></span>
+        <a id="btn-github" class="app-footer-link" href="https://github.com/sk1418/notepad" target="_blank" rel="noopener noreferrer" aria-label="View on GitHub" data-tooltip="View on GitHub"></a>
+      </footer>
     </div>
 
     <div id="modal-backdrop" class="backdrop hidden">

@@ -24,6 +24,8 @@ fun Application.module() {
     configureSession()
     configureSockets()
 
-    val noteService = NoteService(NoteRepo())
-    configureRouting(noteService)
+    val repo = NoteRepo()
+    val noteService = NoteService(repo)
+    val adminService = AdminService(repo, environment)
+    configureRouting(noteService, adminService)
 }

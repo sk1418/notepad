@@ -13,19 +13,21 @@ import java.util.concurrent.atomic.AtomicInteger
 
 private val dbCounter = AtomicInteger(0)
 
-fun testConfig(): MapApplicationConfig {
+fun testConfig(adminPassword: String? = null): MapApplicationConfig {
     val dbName = "test_${dbCounter.incrementAndGet()}_${System.nanoTime()}"
-    return MapApplicationConfig(
+    val cfg = MapApplicationConfig(
         "database.url" to "jdbc:h2:mem:$dbName;DB_CLOSE_DELAY=-1;MODE=MySQL",
         "database.driver" to "org.h2.Driver",
         "database.user" to "",
         "database.password" to "",
-        "session.signKey" to "6819b57a326945c1968f45236589",
+        "session.signKey" to "0123456789abcdef0123456789abcdef",
     )
+    if (adminPassword != null) cfg.put("admin.password", adminPassword)
+    return cfg
 }
 
-fun withTestApp(block: suspend ApplicationTestBuilder.(HttpClient) -> Unit) = testApplication {
-    environment { config = testConfig() }
+fun withTestApp(adminPassword: String? = null, block: suspend ApplicationTestBuilder.(HttpClient) -> Unit) = testApplication {
+    environment { config = testConfig(adminPassword) }
     application {
         module()
         transaction { SchemaUtils.create(NoteTable) }

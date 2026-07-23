@@ -1,6 +1,8 @@
 package sk1418.akcloud.notepad.data
 
+import org.jetbrains.exposed.sql.SqlExpressionBuilder
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
+import org.jetbrains.exposed.sql.deleteWhere
 import sk1418.akcloud.notepad.NoteNotFoundException
 import kotlin.time.Clock
 import kotlin.time.ExperimentalTime
@@ -28,6 +30,14 @@ class NoteRepo {
     fun clearPassword(key: String) = mutate(key) { this.password = null }
     fun updateNote(key: String, content: String) = mutate(key) { this.content = content }
     fun updateNoteKey(oldKey: String, newKey: String) = mutate(oldKey) { noteKey = newKey }
+
+    fun listAll(): List<NoteEntity> =
+        NoteEntity.all().orderBy(NoteTable.lastUpdateTs to org.jetbrains.exposed.sql.SortOrder.DESC).toList()
+
+    fun deleteByKeys(keys: Collection<String>): Int {
+        if (keys.isEmpty()) return 0
+        return NoteTable.deleteWhere { with(SqlExpressionBuilder) { NoteTable.noteKey inList keys } }
+    }
 
     private inline fun mutate(key: String, bumpTs: Boolean = true, block: NoteEntity.() -> Unit) {
         val e = loadNoteByKey(key) ?: throw NoteNotFoundException(key)

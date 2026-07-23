@@ -63,3 +63,5 @@ src/main/resources/static/*
 *.log
 .DS_Store
 Thumbs.db
+### FE: stale tsc byproducts (Vite bundles from .ts) ###
+frontend/src/*.js

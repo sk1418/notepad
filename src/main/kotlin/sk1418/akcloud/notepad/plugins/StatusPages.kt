@@ -4,6 +4,8 @@ import io.ktor.http.HttpStatusCode
 import io.ktor.server.application.*
 import io.ktor.server.plugins.statuspages.*
 import io.ktor.server.response.*
+import sk1418.akcloud.notepad.AdminDisabledException
+import sk1418.akcloud.notepad.AdminUnauthorizedException
 import sk1418.akcloud.notepad.InvalidPasswordException
 import sk1418.akcloud.notepad.NoteKeyExistsException
 import sk1418.akcloud.notepad.NoteNotFoundException
@@ -16,6 +18,12 @@ fun Application.configureStatusPages() {
         }
         exception<InvalidPasswordException> { call, e ->
             call.respond(HttpStatusCode.Unauthorized, mapOf("error" to e.msg))
+        }
+        exception<AdminUnauthorizedException> { call, e ->
+            call.respond(HttpStatusCode.Unauthorized, mapOf("error" to e.msg))
+        }
+        exception<AdminDisabledException> { call, e ->
+            call.respond(HttpStatusCode.ServiceUnavailable, mapOf("error" to e.msg))
         }
         exception<NoteKeyExistsException> { call, e ->
             call.respond(HttpStatusCode.Conflict, mapOf("error" to e.msg))

@@ -1,16 +1,36 @@
 import { defineConfig, type Connect } from 'vite';
 import httpProxy from 'http-proxy';
+import { resolve } from 'path';
+import { readFileSync } from 'fs';
 
 // Ktor backend
 const BACKEND = 'http://localhost:8080';
 
-// Path-based proxy isn't enough — BE serves POST `/{key}` which clashes with
-// SPA GETs. Forward all non-GET (and /ws) requests to the backend, let GETs
-// fall through to Vite (so any URL serves index.html for the SPA).
+// Pull version from top-level build.gradle.kts so FE badge stays in sync
+function readAppVersion(): string {
+  try {
+    const gradle = readFileSync(resolve(__dirname, '..', 'build.gradle.kts'), 'utf8');
+    const m = gradle.match(/^\s*version\s*=\s*"([^"]+)"/m);
+    return m?.[1] ?? '0.0.0';
+  } catch { return '0.0.0'; }
+}
+const APP_VERSION = readAppVersion();
+
 export default defineConfig({
+  define: {
+    __APP_VERSION__: JSON.stringify(APP_VERSION),
+  },
   server: {
     port: 5173,
     middlewareMode: false,
+  },
+  build: {
+    rollupOptions: {
+      input: {
+        main: resolve(__dirname, 'index.html'),
+        admin: resolve(__dirname, 'admin.html'),
+      },
+    },
   },
   plugins: [
     {
@@ -29,18 +49,22 @@ export default defineConfig({
             proxy.web(req, res);
             return;
           }
+          // Proxy admin API GETs to backend too
+          if (req.url?.startsWith('/admin/')) {
+            proxy.web(req, res);
+            return;
+          }
           next();
         };
         server.middlewares.use(mw);
 
-        // WebSocket upgrade
         server.httpServer?.on('upgrade', (req, sock, head) => {
           if (req.url?.startsWith('/ws')) proxy.ws(req, sock, head);
         });
       },
     },
     {
-      // Make sure deep URLs (e.g. /abc) serve index.html for the SPA.
+      // SPA fallback: unknown GETs → index.html, EXCEPT /admin → admin.html
       name: 'spa-fallback',
       configureServer(server) {
         server.middlewares.use((req, _res, next) => {
@@ -53,7 +77,11 @@ export default defineConfig({
             !req.url.includes('.') &&
             req.url !== '/'
           ) {
-            req.url = '/';
+            if (req.url === '/admin' || req.url.startsWith('/admin?')) {
+              req.url = '/admin.html';
+            } else {
+              req.url = '/';
+            }
           }
           next();
         });

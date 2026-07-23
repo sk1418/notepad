@@ -2,6 +2,8 @@ import { generateShare, InvalidPasswordError, KeyTakenError, loadOrCreate, loadS
 import { NoteSocket, type WsState } from './ws';
 import { icons } from './icons';
 
+declare const __APP_VERSION__: string;
+
 let markdownReady: Promise<(src: string) => string> | null = null;
 function loadMarkdown() {
   if (!markdownReady) {
@@ -87,7 +89,7 @@ const FONTS: Record<string, string> = {
   palatino: "'Palatino Linotype', 'Book Antiqua', Palatino, serif",
 };
 
-const KEY_PATTERN = /^[A-Za-z0-9._-]{1,32}$/;
+const KEY_PATTERN = /^[A-Za-z0-9._-]{1,64}$/;
 const NOTE_SETTINGS_CAP = 200;
 const NOTE_SETTINGS_INDEX = 'notepad.noteIndex';
 
@@ -188,6 +190,12 @@ el.modalEyeCurrent.innerHTML = icons.eye;
 el.btnEditKey.innerHTML = icons.pencil;
 (el.popView.querySelector('summary') as HTMLElement).innerHTML = icons.external;
 (document.querySelector('.brand-icon') as HTMLElement).innerHTML = icons.notebook;
+{
+  const gh = document.getElementById('btn-github');
+  if (gh) gh.innerHTML = icons.github;
+  const ver = document.getElementById('app-version');
+  if (ver) ver.textContent = `v${__APP_VERSION__}`;
+}
 el.btnEditKey.addEventListener('click', () => {
   el.key.focus();
   el.key.select();
@@ -421,7 +429,7 @@ el.key.addEventListener('change', async () => {
     return;
   }
   if (!KEY_PATTERN.test(next)) {
-    alert('Invalid key. Allowed: letters, digits, . _ - (max 32).');
+    alert('Invalid key. Allowed: letters, digits, . _ - (max 64).');
     el.key.value = note.noteKey;
     return;
   }

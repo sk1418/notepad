@@ -206,6 +206,29 @@ html[data-theme="dark"] body {
 html[data-theme="dark"] .editor-card {
   box-shadow: 0 4px 24px rgba(0, 0, 0, 0.5);
 }
+.app-footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 12px 4px;
+  color: var(--fg-dim);
+  font-size: 12px;
+}
+.app-footer-name { font-weight: 600; }
+.app-footer-ver { font-family: var(--editor-font); opacity: 0.8; }
+.app-footer-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--fg-dim);
+  text-decoration: none;
+  padding: 4px;
+  border-radius: 4px;
+  transition: color 0.15s;
+}
+.app-footer-link:hover { color: var(--fg); background: var(--hover-bg); }
+.app-footer-link svg { display: block; }
 .editor-wrap {
   flex: 1 1 auto;
   display: flex;

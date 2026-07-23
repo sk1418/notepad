@@ -10,7 +10,11 @@ services:
       - notepad-data:/data/note.db
     environment:
       DB_URL: jdbc:sqlite:/data/note.db
-      SESSION_SIGN_KEY: ${SESSION_SIGN_KEY:-changeme6819b57a326945c1968f45236589}
+      # REQUIRED. Refuses to start if unset or equal to the leaked repo default.
+      # Generate once with:  openssl rand -hex 32
+      SESSION_SIGN_KEY: ${SESSION_SIGN_KEY:?set SESSION_SIGN_KEY to a random hex string, e.g. $(openssl rand -hex 32)}
+      # Optional. Enables /admin page. Leave unset to disable.
+      NOTEPAD_ADMIN_PW: ${NOTEPAD_ADMIN_PW:-}
       # ktor.deployment.environment: prod   # uncomment to enable secure cookies (needs HTTPS)
 
 volumes:

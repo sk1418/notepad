@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Notepad — Admin</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="stylesheet" href="/src/style.css" />
+    <link rel="stylesheet" href="/src/admin.css" />
+  </head>
+  <body>
+    <div id="admin-app">
+      <header class="top-bar">
+        <div class="brand"><span class="brand-icon"></span>Notepad · admin</div>
+        <div class="spacer"></div>
+        <nav class="toolbar">
+          <button id="btn-refresh" class="icon-btn" data-tooltip="Reload" type="button" aria-label="Reload"></button>
+          <button id="btn-delete" class="icon-btn danger" data-tooltip="Delete selected" type="button" aria-label="Delete selected" disabled></button>
+          <button id="btn-logout" class="icon-btn" data-tooltip="Log out" type="button" aria-label="Log out"></button>
+        </nav>
+      </header>
+
+      <main class="admin-main">
+        <div id="admin-empty" class="admin-empty hidden">No notes.</div>
+        <div id="admin-error" class="admin-error hidden"></div>
+        <table id="admin-table" class="admin-table hidden">
+          <thead>
+            <tr>
+              <th class="col-check"><input type="checkbox" id="check-all" aria-label="Select all" /></th>
+              <th class="col-key">Key</th>
+              <th class="col-size sortable" data-sort="size">Size<span class="sort-ind"></span></th>
+              <th class="col-pw">Password</th>
+              <th class="col-share">Share URL</th>
+              <th class="col-time sortable" data-sort="updated">Updated<span class="sort-ind"></span></th>
+              <th class="col-actions">Actions</th>
+            </tr>
+          </thead>
+          <tbody id="admin-tbody"></tbody>
+        </table>
+      </main>
+    </div>
+
+    <div id="login-backdrop" class="backdrop">
+      <div class="modal" role="dialog" aria-modal="true" aria-labelledby="login-title">
+        <h3 id="login-title">Admin login</h3>
+        <p class="hint" id="login-hint">Enter the admin password.</p>
+        <div class="input-wrap">
+          <input id="login-input" type="password" placeholder="admin password"
+                 autocomplete="current-password" autocapitalize="off" autocorrect="off" spellcheck="false" />
+          <button type="button" id="login-eye" class="eye-btn" data-tooltip="Show password" aria-label="Show password"></button>
+        </div>
+        <div class="modal-error hidden" id="login-error"></div>
+        <div class="actions">
+          <button id="login-submit" class="primary">Sign in</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="content-backdrop" class="backdrop hidden">
+      <div class="modal modal-lg" role="dialog" aria-modal="true" aria-labelledby="content-title">
+        <div class="modal-head">
+          <h3 id="content-title">Note content</h3>
+          <button type="button" id="content-close" class="icon-btn" aria-label="Close"></button>
+        </div>
+        <p class="hint" id="content-meta"></p>
+        <pre id="content-body" class="content-body"></pre>
+        <div class="actions">
+          <button type="button" id="content-open" class="icon-btn">Open in new tab</button>
+          <button type="button" id="content-copy" class="icon-btn">Copy</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="pw-backdrop" class="backdrop hidden">
+      <div class="modal" role="dialog" aria-modal="true" aria-labelledby="pw-title">
+        <div class="modal-head">
+          <h3 id="pw-title">Set password</h3>
+          <button type="button" id="pw-close" class="icon-btn" aria-label="Close"></button>
+        </div>
+        <p class="hint" id="pw-hint">Leave empty to remove password.</p>
+        <div class="input-wrap">
+          <input id="pw-input" type="password" placeholder="new password"
+                 autocomplete="new-password" autocapitalize="off" autocorrect="off" spellcheck="false" />
+          <button type="button" id="pw-eye" class="eye-btn" data-tooltip="Show password" aria-label="Show password"></button>
+        </div>
+        <div class="modal-error hidden" id="pw-error"></div>
+        <div class="actions">
+          <button id="pw-cancel" class="icon-btn">Cancel</button>
+          <button id="pw-submit" class="primary">Save</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="toast" class="toast hidden" role="status" aria-live="polite"></div>
+
+    <script type="module" src="/src/admin.ts"></script>
+  </body>
+</html>

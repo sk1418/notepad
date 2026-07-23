@@ -10,4 +10,6 @@ database:
   user: ${DB_USER:}
   password: ${DB_PASSWORD:}
 session:
-  signKey: ${SESSION_SIGN_KEY:6819b57a326945c1968f45236589}
+  signKey: ${SESSION_SIGN_KEY:}
+admin:
+  password: ${NOTEPAD_ADMIN_PW:}
