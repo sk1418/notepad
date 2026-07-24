@@ -19,8 +19,7 @@ class NoteService(val repo: NoteRepo) {
     fun loadNote(noteKey: String?): Note = transaction {
         val key = noteKey ?: generateNewKey()
         val entity = repo.loadNoteByKey(key)
-        if (entity != null) entity.toNote(hideContent = entity.password != null)
-        else Note(id = 0, noteKey = key, readOnlyUrl = null, content = "", lastUpdateTs = Clock.System.now())
+        entity?.toNote(hideContent = entity.password != null) ?: Note(id = 0, noteKey = key, readOnlyUrl = null, content = "", lastUpdateTs = Clock.System.now())
     }
 
     fun unlockNote(key: String, password: String): Note = transaction {
