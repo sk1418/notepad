@@ -84,8 +84,8 @@ class NoteServiceTest {
 
     @Test
     fun updateNoteKey_conflict_throws() {
-        service.loadNote("keyA123")
-        service.loadNote("keyB123")
+        service.updateContent("keyA123", "a")
+        service.updateContent("keyB123", "b")
         assertFailsWith<NoteKeyExistsException> {
             service.updateNoteKey("keyA123", SetKeyRequest("keyB123"))
         }
@@ -180,9 +180,9 @@ class NoteServiceTest {
     }
 
     @Test
-    fun generateShareUrl_missing_note_throws() {
-        assertFailsWith<NoteNotFoundException> { service.generateShareUrl("ghost01") }
-        assertNull(null) // silence unused import
-        assertNotNull(service)
+    fun generateShareUrl_auto_creates_when_missing() {
+        val url = service.generateShareUrl("ghost01")
+        assertEquals(SHARE_LENGTH, url.length)
+        assertNotNull(service.loadByShareUrl(url))
     }
 }

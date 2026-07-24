@@ -139,6 +139,7 @@ class AdminRoutesTest {
     @Test
     fun admin_set_and_clear_password() = withTestApp(adminPassword = "adminpw") { client ->
         client.post("/pw001")
+        client.webSocket("/ws/pw001") { send(Frame.Text("seed")); incoming.receive() }
         client.post("/admin/login") {
             header(HttpHeaders.ContentType, ContentType.Application.Json.toString())
             setBody("""{"password":"adminpw"}""")

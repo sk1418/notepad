@@ -3,6 +3,8 @@
 A minimal, self-hosted online notepad.
 Open a URL, start typing — your text is saved automatically and synced to any tab pointing at the same URL.
 
+[Demo](https://note.showcase.gleeze.com) *Note: The data of the demo will be wiped on an ad-hoc basis*
+
 **Ktor + Kotlin** backend · **Vite + TypeScript** frontend · **SQLite** storage · ships as a single Docker image.
 
 ---

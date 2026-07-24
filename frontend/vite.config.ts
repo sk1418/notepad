@@ -8,6 +8,10 @@ const BACKEND = 'http://localhost:8080';
 
 // Pull version from top-level build.gradle.kts so FE badge stays in sync
 function readAppVersion(): string {
+  // 1. Explicit env var (Docker build passes APP_VERSION build-arg)
+  const envV = process.env['APP_VERSION']?.trim();
+  if (envV) return envV;
+  // 2. Fallback: parse from top-level build.gradle.kts (local dev)
   try {
     const gradle = readFileSync(resolve(__dirname, '..', 'build.gradle.kts'), 'utf8');
     const m = gradle.match(/^\s*version\s*=\s*"([^"]+)"/m);

@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "dev:be": "cd .. && ./gradlew --console=plain run",
+    "dev:be": "cd .. && SESSION_SIGN_KEY=${SESSION_SIGN_KEY:-$(node -e 'console.log(require(\"crypto\").randomBytes(32).toString(\"hex\"))')} ./gradlew --console=plain run",
     "start": "concurrently -k -n BE,FE -c blue,green \"npm:dev:be\" \"npm:dev\"",
     "build": "tsc && vite build",
     "preview": "vite preview"

@@ -94,7 +94,9 @@ class NoteRoutesTest {
 
     @Test
     fun set_noteKey_conflict_returns_409() = withTestApp { client ->
+        // persist "takenkk" via WS so it truly exists in DB
         client.loadNote("takenkk")
+        client.webSocket("/ws/takenkk") { send(Frame.Text("seed")); incoming.receive() }
         client.loadNote("origkey")
         val res = client.put("/set-noteKey") {
             header(HttpHeaders.ContentType, ContentType.Application.Json.toString())

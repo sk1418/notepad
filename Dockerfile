@@ -4,6 +4,8 @@
 # Pinned to the builder's native arch — JS bundling is arch-agnostic and this
 # avoids qemu-emulating amd64 npm on arm64 hosts (which hangs for minutes/hours).
 FROM --platform=$BUILDPLATFORM node:22-alpine AS fe-build
+ARG APP_VERSION=dev
+ENV APP_VERSION=$APP_VERSION
 WORKDIR /fe
 COPY frontend/package.json frontend/package-lock.json* ./
 RUN npm install --no-audit --no-fund
